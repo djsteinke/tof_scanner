@@ -14,21 +14,24 @@ class TOF(object):
         self._delay = 0.25
         self._sensor = None
         self._avg = []
+        self._cnt = 0
 
     def get_range(self):
         if self._running:
             if not self._ranging:
+                self._cnt += 1
                 self._ranging = True
                 distance = self._sensor.get_distance()
-                module_logger.debug("Range: %0.2f mm" % distance)
                 self._range = distance
                 self._avg.append(distance)
-                while len(self._avg) > 4:
+                while len(self._avg) > 10:
                     self._avg.pop(0)
                 a = 0.0
                 if len(self._avg) > 0:
                     a = sum(self._avg)/len(self._avg)
-                module_logger.debug("Range: %f mm, %0.1f mm" % (distance, a))
+                if self._cnt > 8:
+                    module_logger.debug("Range: %f mm, %0.1f mm" % (distance, a))
+                    self._cnt = 0
                 self._ranging = False
             timer = threading.Timer(self._delay, self.get_range)
             timer.start()
