@@ -11,7 +11,7 @@ class TOF(object):
         self._running = False
         self._ranging = False
         self._range = 0
-        self._delay = 0.25
+        self._delay = 0.1
         self._sensor = None
         self._avg = []
         self._cnt = 0
@@ -24,13 +24,13 @@ class TOF(object):
                 distance = self._sensor.get_distance()
                 self._range = distance
                 self._avg.append(distance)
-                while len(self._avg) > 10:
+                while len(self._avg) > 30:
                     self._avg.pop(0)
                 a = 0.0
                 if len(self._avg) > 0:
                     a = sum(self._avg)/len(self._avg)
-                if self._cnt > 8:
-                    module_logger.debug("Range: %f mm, %0.1f mm" % (distance, a))
+                if self._cnt > 30:
+                    module_logger.debug("Range: %d mm, %0.1f mm" % (int(distance), a))
                     self._cnt = 0
                 self._ranging = False
             timer = threading.Timer(self._delay, self.get_range)
@@ -48,7 +48,7 @@ class TOF(object):
             self._running = True
             self._sensor = VL53L0X.VL53L0X(i2c_bus=1, i2c_address=0x29)
             self._sensor.open()
-            self._sensor.start_ranging(VL53L0X.Vl53l0xAccuracyMode.BEST)
+            self._sensor.start_ranging(VL53L0X.Vl53l0xAccuracyMode.BETTER)
             timer = threading.Timer(1, self.get_range)
             timer.start()
 
