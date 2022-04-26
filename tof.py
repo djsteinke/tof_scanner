@@ -11,10 +11,14 @@ class TOF(object):
         self._running = False
         self._ranging = False
         self._range = 0
-        self._delay = 0.1
+        self._delay = 0.25
         self._sensor = None
         self._avg = []
         self._cnt = 0
+
+    def low_pass_filter(self, val):
+        a = 0.15
+        self._range += (self._range - val) * a
 
     def get_range(self):
         if self._running:
@@ -22,9 +26,9 @@ class TOF(object):
                 self._cnt += 1
                 self._ranging = True
                 distance = self._sensor.get_distance()
-                self._range = distance
+                self.low_pass_filter(distance)
                 self._avg.append(distance)
-                while len(self._avg) > 30:
+                while len(self._avg) > 12:
                     self._avg.pop(0)
                 a = 0.0
                 if len(self._avg) > 0:
@@ -48,7 +52,7 @@ class TOF(object):
             self._running = True
             self._sensor = VL53L0X.VL53L0X(i2c_bus=1, i2c_address=0x29)
             self._sensor.open()
-            self._sensor.start_ranging(VL53L0X.Vl53l0xAccuracyMode.BETTER)
+            self._sensor.start_ranging(VL53L0X.Vl53l0xAccuracyMode.BEST)
             timer = threading.Timer(1, self.get_range)
             timer.start()
 
