@@ -11,7 +11,7 @@ class TOF(object):
         self._running = False
         self._ranging = False
         self._range = 0
-        self._delay = 15
+        self._delay = 2
         self._sensor = None
 
     def get_range(self):
