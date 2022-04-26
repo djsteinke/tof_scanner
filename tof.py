@@ -22,23 +22,31 @@ class TOF(object):
 
     def get_range(self):
         if self._running:
+            restart = False
             if not self._ranging:
                 self._cnt += 1
                 self._ranging = True
                 distance = self._sensor.get_distance()
-                self.low_pass_filter(distance)
-                self._avg.append(distance)
-                while len(self._avg) > 12:
-                    self._avg.pop(0)
-                a = 0.0
-                if len(self._avg) > 0:
-                    a = sum(self._avg)/len(self._avg)
-                if self._cnt > 12:
-                    module_logger.debug("Range: %d mm, %0.1f mm" % (int(distance), a))
-                    self._cnt = 0
+                if distance > 0:
+                    self.low_pass_filter(distance)
+                    self._avg.append(distance)
+                    while len(self._avg) > 12:
+                        self._avg.pop(0)
+                    a = 0.0
+                    if len(self._avg) > 0:
+                        a = sum(self._avg)/len(self._avg)
+                    if self._cnt > 12:
+                        module_logger.debug("Range: %d mm, %0.1f mm" % (int(distance), a))
+                        self._cnt = 0
+                else:
+                    restart = True
                 self._ranging = False
-            timer = threading.Timer(self._delay, self.get_range)
-            timer.start()
+            if restart:
+                self.stop()
+                self.start()
+            else:
+                timer = threading.Timer(self._delay, self.get_range)
+                timer.start()
 
     def get_status(self):
         if self._running:
