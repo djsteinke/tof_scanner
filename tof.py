@@ -17,7 +17,7 @@ class TOF(object):
         self._cnt = 0
 
     def low_pass_filter(self, val):
-        a = 0.15
+        a = 0.1
         self._range += (self._range - val) * a
 
     def get_range(self):
@@ -35,7 +35,7 @@ class TOF(object):
                     a = 0.0
                     if len(self._avg) > 0:
                         a = sum(self._avg)/len(self._avg)
-                    if self._cnt > 12:
+                    if self._cnt > 4:
                         module_logger.debug("Range: %d mm, %0.1f mm" % (int(distance), a))
                         self._cnt = 0
                 else:
