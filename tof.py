@@ -19,7 +19,7 @@ class TOF(object):
             if not self._ranging:
                 self._ranging = True
                 distance = self._sensor.get_distance()
-                module_logger.debug("Range: {0}mm".format(distance))
+                module_logger.debug("Range: %0.2f mm" % distance)
                 self._range = distance
                 self._ranging = False
             timer = threading.Timer(self._delay, self.get_range)
