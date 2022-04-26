@@ -35,7 +35,7 @@ class TOF(object):
         if not self._running:
             module_logger.debug("start()")
             self._running = True
-            self._sensor = VL53L0X.VL53L0X(i2c_bus=0, i2c_address=0x29)
+            self._sensor = VL53L0X.VL53L0X(i2c_bus=1, i2c_address=0x29)
             self._sensor.open()
             self._sensor.start_ranging(VL53L0X.Vl53l0xAccuracyMode.BEST)
             timer = threading.Timer(1, self.get_range)
