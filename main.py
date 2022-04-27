@@ -55,7 +55,7 @@ def scan():
 
 if __name__ == '__main__':
     parser = optparse.OptionParser()
-    parser.add_option("-s", "--scan", action="store", type="boolean", default=True, dest="scan",
+    parser.add_option("-s", "--scan", action="store", type="string", default="true", dest="scan",
                       help="")
     parser.add_option("-c", "--center", action="store", type="int", default=0, dest="center",
                       help="")
@@ -63,7 +63,7 @@ if __name__ == '__main__':
                       help="")
     args, _ = parser.parse_args()
 
-    scan = args.scan
+    scan = args.scan == "true"
     center = args.center
     height = args.height
 
