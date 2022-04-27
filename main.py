@@ -55,13 +55,14 @@ def scan():
 
 if __name__ == '__main__':
     parser = optparse.OptionParser()
-    parser.add_option("-s", "--scan", action="store", type="string", default=None, dest="scan",
+    parser.add_option("-s", "--scan", action="store", type="bool", default=True, dest="scan",
                       help="")
     parser.add_option("-c", "--center", action="store", type="int", default=0, dest="center",
                       help="")
     parser.add_option("-v", "--height", action="store", type="int", default=100, dest="height",
                       help="")
     args, _ = parser.parse_args()
+
     scan = args.scan
     center = args.center
     height = args.height
@@ -73,7 +74,7 @@ if __name__ == '__main__':
     tof = TOF()
     tof.start()
 
-    if scan == "scan":
+    if scan:
         v_stepper = Stepper(v_pins)
         r_stepper = Stepper(r_pins)
         scan()
