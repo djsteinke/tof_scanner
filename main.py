@@ -59,7 +59,7 @@ if __name__ == '__main__':
                       help="")
     parser.add_option("-c", "--center", action="store", type="int", default="", dest="center",
                       help="")
-    parser.add_option("-h", "--height", action="store", type="int", default="", dest="height",
+    parser.add_option("-v", "--height", action="store", type="int", default="", dest="height",
                       help="")
     args, _ = parser.parse_args()
     scan = args.scan
