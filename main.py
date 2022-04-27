@@ -28,7 +28,7 @@ v_pins = [14, 15, 18, 23]
 r_pins = [24, 25, 8, 7]
 
 
-def scan():
+def run_scan():
     points = []
     v_steps = 512 / 2
     for h in range(0, int(height), 2):              # height in mm
@@ -77,4 +77,4 @@ if __name__ == '__main__':
     if scan:
         v_stepper = Stepper(v_pins)
         r_stepper = Stepper(r_pins)
-        scan()
+        run_scan()
