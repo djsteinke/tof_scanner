@@ -30,7 +30,8 @@ class TOF(object):
                 if distance > 0:
                     self.low_pass_filter(distance)
                     self._avg.append(distance)
-                    while len(self._avg) > 12:
+                    c = int(4 / self._delay)
+                    while len(self._avg) > c:
                         self._avg.pop(0)
                     a = 0.0
                     if len(self._avg) > 0:
