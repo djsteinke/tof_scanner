@@ -18,7 +18,7 @@ class TOF(object):
         self._cnt = 0
 
     def low_pass_filter(self, val):
-        a = 0.05
+        a = 0.1
         self._range += (self._range - val) * a
 
     def get_range(self):
