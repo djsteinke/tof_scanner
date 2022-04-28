@@ -30,7 +30,7 @@ r_pins = [24, 25, 8, 7]
 
 def run_scan():
     points = []
-    v_steps = 512 / 2
+    v_steps = 512
     r_step = 4
     r_steps = int(360.0/512.0*angle)
     for h in range(0, int(height), 2):              # height in mm
@@ -44,7 +44,7 @@ def run_scan():
                     rad * math.sin(alpha), rad * math.cos(alpha), h
                 ])
             r_stepper.step(r_step, wait=0.012)
-        v_stepper.step(v_steps)
+        v_stepper.step(v_steps, ccwise=True)
         if angle < 360:
             r_stepper.step(r_steps, wait=0.080, ccwise=True)
 
