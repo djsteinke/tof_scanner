@@ -8,5 +8,5 @@ class Stepper(object):
         self._pins = pins
         self._motor = BYJMotor()
 
-    def step(self, steps, wait=0.006):
-        self._motor.motor_run(self._pins, steps=steps, ccwise=False, steptype="full", wait=wait)
+    def step(self, steps, wait=0.006, ccwise=False):
+        self._motor.motor_run(self._pins, steps=steps, ccwise=ccwise, steptype="full", wait=wait)
