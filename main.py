@@ -32,7 +32,7 @@ def run_scan():
     points = []
     v_steps = 512
     r_step = 4
-    r_steps = int(360.0/512.0*angle)
+    r_steps = int(512/360.0*angle)
     for h in range(0, int(height), 2):              # height in mm
         for i in range(0, r_steps, r_step):            # steps / rot,
             sleep(0.6)
