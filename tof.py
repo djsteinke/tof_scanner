@@ -12,7 +12,7 @@ class TOF(object):
         self._running = False
         self._ranging = False
         self._range = 0
-        self._delay = 0.077
+        self._delay = 0.070
         self._sensor = None
         self._avg = []
         self._cnt = 0
