@@ -62,6 +62,8 @@ def run_scan():
     out.write(points)
     out.close()
 
+    tof.stop()
+
 
 def return_vert():
     s = int(height) / 2 * 512
