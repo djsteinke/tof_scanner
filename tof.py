@@ -4,6 +4,7 @@ import VL53L0X as VL53L0X
 from logging import getLogger
 
 module_logger = getLogger("main.tof")
+max_disp_cnt = 60
 
 
 class TOF(object):
@@ -11,13 +12,13 @@ class TOF(object):
         self._running = False
         self._ranging = False
         self._range = 0
-        self._delay = 0.25
+        self._delay = 0.077
         self._sensor = None
         self._avg = []
         self._cnt = 0
 
     def low_pass_filter(self, val):
-        a = 0.1
+        a = 0.05
         self._range += (self._range - val) * a
 
     def get_range(self):
@@ -36,9 +37,8 @@ class TOF(object):
                     a = 0.0
                     if len(self._avg) > 0:
                         a = sum(self._avg)/len(self._avg)
-                    if self._cnt > 4:
+                    if self._cnt % 20 == 0 and self._cnt / 20 < max_disp_cnt:
                         module_logger.debug("Range: %d mm, %0.1f mm" % (int(distance), a))
-                        self._cnt = 0
                 else:
                     restart = True
                 self._ranging = False
@@ -61,7 +61,7 @@ class TOF(object):
             self._running = True
             self._sensor = VL53L0X.VL53L0X(i2c_bus=1, i2c_address=0x29)
             self._sensor.open()
-            self._sensor.start_ranging(VL53L0X.Vl53l0xAccuracyMode.BEST)
+            self._sensor.start_ranging(VL53L0X.Vl53l0xAccuracyMode.BETTER)
             timer = threading.Timer(1, self.get_range)
             timer.start()
 

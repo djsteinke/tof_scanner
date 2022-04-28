@@ -5,6 +5,7 @@ import os
 from stepper import Stepper
 from tof import TOF
 from time import strftime, sleep
+from threading import Timer
 
 
 logger = logging.getLogger('main')
@@ -34,8 +35,11 @@ def run_scan():
     r_step = 4
     r_steps = int(512/360.0*angle)
     for h in range(0, int(height), 2):              # height in mm
+        print('V: %d/%d' % (h, int(height)))
+        if h > 0:
+            v_stepper.step(v_steps, ccwise=True)
         for i in range(0, r_steps, r_step):            # steps / rot,
-            sleep(0.6)
+            #sleep(0.6)
             avg_a = tof.avg
             if len(avg_a) > 0:
                 rad = center - (sum(avg_a) / len(avg_a))
@@ -43,10 +47,12 @@ def run_scan():
                 points.append([
                     rad * math.sin(alpha), rad * math.cos(alpha), h
                 ])
-            r_stepper.step(r_step, wait=0.012)
-        v_stepper.step(v_steps, ccwise=True)
+            r_stepper.step(r_step, rpm=2)
         if angle < 360:
-            r_stepper.step(r_steps, wait=0.080, ccwise=True)
+            r_stepper.step(r_steps, rpm=4, ccwise=True)
+
+    # return sensor to bottom
+    Timer(0.1, return_vert).start()
 
     points = ["%0.1f %0.1f %0.1f" % (x, y, z) for x, y, z in points]
     points = str.join("\n", points)
@@ -55,6 +61,11 @@ def run_scan():
     out = open(f'{timestamp}.xyz', "w")
     out.write(points)
     out.close()
+
+
+def return_vert():
+    s = int(height) / 2 * 512
+    v_stepper.step(s)
 
 
 if __name__ == '__main__':
