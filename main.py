@@ -84,6 +84,7 @@ def run_scan_new():
                 rad * math.sin(alpha), rad * math.cos(alpha), h
             ])
         scanning = r_step == r_stepper.steps and v_step == v_stepper.steps
+        sleep(0.002)
 
     # return sensor to bottom
     Timer(0.1, return_vert).start()
