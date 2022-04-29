@@ -71,14 +71,14 @@ def run_scan_new():
     steps = int(height / 2 * 512)
     for h in range(0, steps, 4):
         if h > 0:
-            v_stepper.step(4, ccwise=True)
+            v_stepper.start_step(4, ccwise=True)
         rad = center - tof.range
         i = h % 512
         alpha = math.radians(360.0 / 512.0 * (i * 1.0))
         points.append([
             rad * math.sin(alpha), rad * math.cos(alpha), h
         ])
-        r_stepper.step(4, rpm=2)
+        r_stepper.start_step(4, rpm=2)
 
     Timer(0.1, return_vert).start()
 
