@@ -32,6 +32,8 @@ class Stepper(object):
         while self._running:
             self._motor.motor_run(self._pins, steps=1, ccwise=self._ccwise, steptype="full", wait=self._wait)
             self._step += 1
+            if self._step >= self._steps:
+                self._running = False
 
     def stop(self):
         self._running = False

@@ -75,16 +75,15 @@ def run_scan_new():
     while scanning:
         r_step = r_stepper.step
         v_step = v_stepper.step
-        if r_step % 512 % 2 == 0:
-            rad = center - tof.range
-            i = r_step % 512
-            alpha = math.radians(360.0 / 512.0 * (i * 1.0))
-            h = v_step * 1.0 / 512.0 * 2.0
-            points.append([
-                rad * math.sin(alpha), rad * math.cos(alpha), h
-            ])
+        rad = center - tof.range
+        i = r_step % 512
+        alpha = math.radians(360.0 / 512.0 * (i * 1.0))
+        h = v_step * 1.0 / 512.0 * 2.0
+        points.append([
+            rad * math.sin(alpha), rad * math.cos(alpha), h
+        ])
         scanning = r_step == r_stepper.steps and v_step == v_stepper.steps
-        sleep(0.002)
+        sleep(0.008)
 
     # return sensor to bottom
     Timer(0.1, return_vert).start()
