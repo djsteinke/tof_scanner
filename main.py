@@ -68,6 +68,7 @@ def run_scan_new():
     global scanning
     points = []
     steps = int(height / 2 * 512)
+    last_mm = 0
     for h in range(0, steps, 4):
         if h > 0:
             v_stepper.start_step(4, ccwise=True)
@@ -75,6 +76,7 @@ def run_scan_new():
         rad = center - tof.range
         i = h % 512 * 1.0
         z = h * 1.0 / 512.0
+
         alpha = math.radians(i / 512.0 * 360.0)
         points.append([
             rad * math.sin(alpha), rad * math.cos(alpha), z
@@ -102,9 +104,9 @@ if __name__ == '__main__':
     parser = optparse.OptionParser()
     parser.add_option("-s", "--scan", action="store", type="string", default="true", dest="scan",
                       help="")
-    parser.add_option("-c", "--center", action="store", type="int", default=100, dest="center",
+    parser.add_option("-c", "--center", action="store", type="int", default=88, dest="center",
                       help="")
-    parser.add_option("-v", "--height", action="store", type="int", default=100, dest="height",
+    parser.add_option("-v", "--height", action="store", type="int", default=270, dest="height",
                       help="")
     parser.add_option("-a", "--angle", action="store", type="int", default=360, dest="angle",
                       help="")
