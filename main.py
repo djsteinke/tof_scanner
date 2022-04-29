@@ -131,19 +131,19 @@ if __name__ == '__main__':
         v_steps = int(abs(move) / 2 * 512)
         v_stepper.start_step(v_steps, ccwise=False)
         scan = False
+    else:
+        path = os.path.join(os.getcwd(), "scans")  # create scans dir
+        if not os.path.isdir(path):
+            os.makedirs(path)
 
-    path = os.path.join(os.getcwd(), "scans")  # create scans dir
-    if not os.path.isdir(path):
-        os.makedirs(path)
+        tof = TOF()
+        tof.start()
 
-    tof = TOF()
-    tof.start()
+        scanning = False
 
-    scanning = False
-
-    if scan:
-        v_stepper = Stepper(v_pins)
-        r_stepper = Stepper(r_pins)
-        sleep(3.0)
-        run_scan_new()
-        #run_scan()
+        if scan:
+            v_stepper = Stepper(v_pins)
+            r_stepper = Stepper(r_pins)
+            sleep(3.0)
+            run_scan_new()
+            #run_scan()
