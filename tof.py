@@ -15,6 +15,7 @@ class TOF(object):
         self._delay = 0.075
         self._sensor = None
         self._cnt = 0
+        self._timer = threading.Timer(self._delay, self.get_range)
 
     def low_pass_filter(self, val):
         a = 0.30
@@ -38,8 +39,7 @@ class TOF(object):
                 self.stop()
                 self.start()
             else:
-                timer = threading.Timer(self._delay, self.get_range)
-                timer.start()
+                self._timer.start()
 
     def get_status(self):
         if self._running:
@@ -59,6 +59,7 @@ class TOF(object):
 
     def stop(self):
         module_logger.debug("stop()")
+        self._timer.cancel()
         self._sensor.stop_ranging()
         self._sensor.close()
         self._running = False
