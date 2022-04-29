@@ -38,7 +38,7 @@ class TOF(object):
                     if len(self._avg) > 0:
                         a = sum(self._avg)/len(self._avg)
                     if self._cnt % 20 == 0 and self._cnt / 20 < max_disp_cnt:
-                        module_logger.debug("Range: %d mm, %0.1f mm" % (int(distance), a))
+                        module_logger.debug("Range: %d mm, %0.1f mm" % (int(self.range), a))
                 else:
                     restart = True
                 self._ranging = False
