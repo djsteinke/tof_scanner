@@ -24,7 +24,8 @@ class Stepper(object):
         self._ccwise = ccwise
         if rpm is not None:
             self._wait = wait_from_rpm(rpm)
-        self._wait = wait if wait >= 0.005 else 0.005
+        if self._wait < 0.005:
+            self._wait = 0.005
         Timer(0.001, self.run).start()
 
     def run(self):
