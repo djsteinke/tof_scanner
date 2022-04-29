@@ -22,10 +22,10 @@ class TOF(object):
 
     def low_pass_filter(self, val):
         self._range = val
-        self._range5 += (val - self._range5) * 0.05
-        self._range10 += (val - self._range5) * 0.10
-        self._range15 += (val - self._range5) * 0.15
-        self._range20 += (val - self._range5) * 0.20
+        self._range5 += ((val - self._range5) * 0.05)
+        self._range10 += ((val - self._range10) * 0.10)
+        self._range15 += ((val - self._range15) * 0.15)
+        self._range20 += ((val - self._range20) * 0.20)
 
     def get_range(self):
         if self._running:
