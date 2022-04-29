@@ -1,4 +1,5 @@
 from RpiMotorLib.RpiMotorLib import BYJMotor
+from threading import Timer
 
 
 def wait_from_rpm(rpm):
@@ -11,9 +12,28 @@ class Stepper(object):
             pins = [14, 15, 18, 23]
         self._pins = pins
         self._motor = BYJMotor()
+        self._steps = 0
+        self._step = 0
+        self._running = False
+        self._ccwise = False
+        self._wait = 0.005
 
-    def step(self, steps, wait=0.005, ccwise=False, rpm=None):
+    def start_step(self, steps, wait=0.005, ccwise=False, rpm=None):
+        self._steps = steps
+        self._running = True
+        self._ccwise = ccwise
         if rpm is not None:
-            wait = wait_from_rpm(rpm)
-        wait = wait if wait >= 0.005 else 0.005
-        self._motor.motor_run(self._pins, steps=steps, ccwise=ccwise, steptype="full", wait=wait)
+            self._wait = wait_from_rpm(rpm)
+        self._wait = wait if wait >= 0.005 else 0.005
+        Timer(0.001, self.run).start()
+
+    def run(self):
+        while self._running:
+            self._motor.motor_run(self._pins, steps=1, ccwise=self._ccwise, steptype="full", wait=self._wait)
+
+    def stop(self):
+        self._running = False
+
+    @property
+    def step(self):
+        return self._step

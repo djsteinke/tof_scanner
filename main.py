@@ -65,6 +65,39 @@ def run_scan():
     tof.stop()
 
 
+def run_scan_new():
+    global scanning
+    steps = int(height) / 2 * 512
+    r_stepper.start_step(steps, rpm=2)
+    v_stepper.start_step(steps, rpm=1)
+    scanning = True
+    points = []
+    while scanning:
+        r_step = r_stepper.step
+        v_step = v_stepper.step
+        if r_step % 512 % 2 == 0:
+            rad = center - tof.range
+            i = r_step % 512
+            alpha = math.radians(360.0 / 512.0 * (i * 1.0))
+            h = v_step * 1.0 / 512.0 * 2.0
+            points.append([
+                rad * math.sin(alpha), rad * math.cos(alpha), h
+            ])
+
+    # return sensor to bottom
+    Timer(0.1, return_vert).start()
+
+    points = ["%0.1f %0.1f %0.1f" % (x, y, z) for x, y, z in points]
+    points = str.join("\n", points)
+
+    timestamp = strftime('%Y%m%d_%H%M%S')
+    out = open(f'{timestamp}.xyz', "w")
+    out.write(points)
+    out.close()
+
+    tof.stop()
+
+
 def return_vert():
     s = int(height) / 2 * 512
     v_stepper.step(s)
@@ -94,7 +127,10 @@ if __name__ == '__main__':
     tof = TOF()
     tof.start()
 
+    scanning = False
+
     if scan:
         v_stepper = Stepper(v_pins)
         r_stepper = Stepper(r_pins)
-        run_scan()
+        run_scan_new()
+        # run_scan()
