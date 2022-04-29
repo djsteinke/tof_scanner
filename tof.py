@@ -12,17 +12,16 @@ class TOF(object):
         self._running = False
         self._ranging = False
         self._range = 0
-        self._delay = 0.075
+        self._delay = 0.02
         self._sensor = None
         self._cnt = 0
-        self._timer = threading.Timer(self._delay, self.get_range)
 
     def low_pass_filter(self, val):
         a = 0.30
         self._range += (val - self._range) * a
 
     def get_range(self):
-        if self._running:
+        while self._running:
             restart = False
             if not self._ranging:
                 self._cnt += 1
@@ -39,9 +38,7 @@ class TOF(object):
                 self.stop()
                 self.start()
             else:
-                while self._timer.isAlive():
-                    sleep(0.01)
-                self._timer.start()
+                sleep(self._delay)
 
     def get_status(self):
         if self._running:
@@ -56,11 +53,9 @@ class TOF(object):
             self._sensor = VL53L0X.VL53L0X(i2c_bus=1, i2c_address=0x29)
             self._sensor.open()
             self._sensor.start_ranging(VL53L0X.Vl53l0xAccuracyMode.BETTER)
-            self._timer.start()
 
     def stop(self):
         module_logger.debug("stop()")
-        self._timer.cancel()
         self._sensor.stop_ranging()
         self._sensor.close()
         self._running = False
