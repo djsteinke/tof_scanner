@@ -14,11 +14,10 @@ class TOF(object):
         self._range = 0
         self._delay = 0.075
         self._sensor = None
-        self._avg = []
         self._cnt = 0
 
     def low_pass_filter(self, val):
-        a = 0.15
+        a = 0.30
         self._range += (val - self._range) * a
 
     def get_range(self):
@@ -30,15 +29,8 @@ class TOF(object):
                 distance = self._sensor.get_distance()
                 if distance > 0:
                     self.low_pass_filter(distance)
-                    self._avg.append(distance)
-                    c = int(4 / self._delay)
-                    while len(self._avg) > c:
-                        self._avg.pop(0)
-                    a = 0.0
-                    if len(self._avg) > 0:
-                        a = sum(self._avg)/len(self._avg)
                     if self._cnt % 20 == 0 and self._cnt / 20 < max_disp_cnt:
-                        module_logger.debug("Range: %d mm, %0.1f mm" % (int(self.range), a))
+                        module_logger.debug("Range: %d mm, %0.1f mm" % (distance, self.range))
                 else:
                     restart = True
                 self._ranging = False
@@ -78,7 +70,3 @@ class TOF(object):
     @property
     def running(self):
         return self._running
-
-    @property
-    def avg(self):
-        return self._avg
