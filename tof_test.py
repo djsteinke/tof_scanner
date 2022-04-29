@@ -37,9 +37,8 @@ class TOF(object):
                 if distance > 0:
                     self.low_pass_filter(distance)
                     if self._cnt % 20 == 0 and self._cnt / 20 < max_disp_cnt:
-                        module_logger.debug("Range: %d mm, %0.1f  %0.1f  %0.1f  %0.1f" % (int(self.range), self._range5,
-                                                                                          self._range10, self._range15,
-                                                                                          self._range20))
+                        print("Range: %d mm, %0.1f  %0.1f  %0.1f  %0.1f" % (int(self.range), self._range5, self._range10,
+                                                                            self._range15, self._range20))
                 else:
                     restart = True
                 self._ranging = False
