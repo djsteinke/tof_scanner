@@ -4,7 +4,7 @@ import VL53L0X as VL53L0X
 from logging import getLogger
 
 module_logger = getLogger("main.tof")
-max_disp_cnt = 120
+max_disp_cnt = 60
 
 out = list()
 
