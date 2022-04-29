@@ -38,8 +38,7 @@ def run_scan():
         print('V: %d/%d' % (h, int(height)))
         if h > 0:
             v_stepper.step(v_steps, ccwise=True)
-        for i in range(0, r_steps, r_step):            # steps / rot,
-            #sleep(0.6)
+        for i in range(0, r_steps, r_step):            # steps / rot
             avg_a = tof.avg
             if len(avg_a) > 0:
                 rad = center - (sum(avg_a) / len(avg_a))
@@ -109,12 +108,25 @@ if __name__ == '__main__':
                       help="")
     parser.add_option("-a", "--angle", action="store", type="int", default=360, dest="angle",
                       help="")
+    parser.add_option("-m", "--move", action="store", type="int", default=0, dest="move")
     args, _ = parser.parse_args()
 
     scan = args.scan == "true"
     center = args.center
     height = args.height
     angle = args.angle
+    move = args.move
+
+    if move > 0:
+        v_stepper = Stepper(v_pins)
+        steps = int(move / 2 * 512)
+        v_stepper.step(steps, ccwise=True)
+        scan = False
+    elif move < 0:
+        v_stepper = Stepper(v_pins)
+        steps = int(abs(move) / 2 * 512)
+        v_stepper.step(steps, ccwise=False)
+        scan = False
 
     path = os.path.join(os.getcwd(), "scans")  # create scans dir
     if not os.path.isdir(path):
