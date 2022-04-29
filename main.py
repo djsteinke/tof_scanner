@@ -119,13 +119,13 @@ if __name__ == '__main__':
 
     if move > 0:
         v_stepper = Stepper(v_pins)
-        steps = int(move / 2 * 512)
-        v_stepper.step(steps, ccwise=True)
+        v_steps = int(move / 2 * 512)
+        v_stepper.step(v_steps, ccwise=True)
         scan = False
     elif move < 0:
         v_stepper = Stepper(v_pins)
-        steps = int(abs(move) / 2 * 512)
-        v_stepper.step(steps, ccwise=False)
+        v_steps = int(abs(move) / 2 * 512)
+        v_stepper.step(v_steps, ccwise=False)
         scan = False
 
     path = os.path.join(os.getcwd(), "scans")  # create scans dir
