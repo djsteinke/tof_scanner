@@ -69,7 +69,7 @@ def run_scan_new():
     global scanning
     steps = int(height) / 2 * 512
     r_stepper.start_step(steps, rpm=2)
-    v_stepper.start_step(steps, rpm=1)
+    v_stepper.start_step(steps, rpm=1, ccwise=True)
     scanning = True
     points = []
     while scanning:
