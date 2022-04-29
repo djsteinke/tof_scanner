@@ -1,4 +1,4 @@
-import time
+from time import sleep
 import threading
 import VL53L0X as VL53L0X
 from logging import getLogger
@@ -39,6 +39,8 @@ class TOF(object):
                 self.stop()
                 self.start()
             else:
+                while self._timer.isAlive():
+                    sleep(0.01)
                 self._timer.start()
 
     def get_status(self):
