@@ -72,6 +72,7 @@ def run_scan_new():
     for h in range(0, steps, 4):
         if h > 0:
             v_stepper.start_step(4, ccwise=True)
+            r_stepper.start_step(4, rpm=2)
         rad = center - tof.range
         i = h % 512 * 1.0
         z = h * 1.0 / 512.0
@@ -79,7 +80,6 @@ def run_scan_new():
         points.append([
             rad * math.sin(alpha), rad * math.cos(alpha), z
         ])
-        r_stepper.start_step(4, rpm=2)
 
     Timer(0.1, return_vert).start()
 
