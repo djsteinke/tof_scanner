@@ -29,41 +29,6 @@ v_pins = [14, 15, 18, 23]
 r_pins = [24, 25, 8, 7]
 
 
-def run_scan():
-    points = []
-    v_steps = 512
-    r_step = 2
-    r_steps = int(512/360.0*angle)
-    for h in range(0, int(height), 2):              # height in mm
-        print('V: %d/%d' % (h, int(height)))
-        if h > 0:
-            v_stepper.step(v_steps, ccwise=True)
-        for i in range(0, r_steps, r_step):            # steps / rot
-            avg_a = tof.avg
-            if len(avg_a) > 0:
-                rad = center - (sum(avg_a) / len(avg_a))
-                alpha = math.radians(360.0 / 512.0 * (i * 1.0))
-                points.append([
-                    rad * math.sin(alpha), rad * math.cos(alpha), h
-                ])
-            r_stepper.step(r_step, rpm=2)
-        if angle < 360:
-            r_stepper.step(r_steps, rpm=4, ccwise=True)
-
-    # return sensor to bottom
-    Timer(0.1, return_vert).start()
-
-    points = ["%0.1f %0.1f %0.1f" % (x, y, z) for x, y, z in points]
-    points = str.join("\n", points)
-
-    timestamp = strftime('%Y%m%d_%H%M%S')
-    out = open(f'{timestamp}.xyz', "w")
-    out.write(points)
-    out.close()
-
-    tof.stop()
-
-
 def run_scan_new():
     global scanning
     points = []
@@ -75,7 +40,7 @@ def run_scan_new():
             r_stepper.start_step(4, rpm=2)
         rad = center - tof.range
         i = h % 512 * 1.0
-        z = h * 1.0 / 512.0
+        z = h * 1.0 / 512.0 * 2.0
         if int(z) > last_mm:
             last_mm = int(z)
             print("%d/%d" % (last_mm, height))

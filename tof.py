@@ -2,6 +2,7 @@ from time import sleep
 from threading import Timer
 import VL53L0X as VL53L0X
 from logging import getLogger
+import RPi.GPIO as GPIO
 
 module_logger = getLogger("main.tof")
 max_disp_cnt = 60
