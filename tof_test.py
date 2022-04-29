@@ -16,6 +16,7 @@ class TOF(object):
         self._range10 = 0.0
         self._range15 = 0.0
         self._range20 = 0.0
+        self._range30 = 0.0
         self._delay = 0.075
         self._sensor = None
         self._cnt = 0
@@ -26,6 +27,7 @@ class TOF(object):
         self._range10 += ((val - self._range10) * 0.10)
         self._range15 += ((val - self._range15) * 0.15)
         self._range20 += ((val - self._range20) * 0.20)
+        self._range30 += ((val - self._range20) * 0.30)
 
     def get_range(self):
         if self._running:
@@ -37,8 +39,12 @@ class TOF(object):
                 if distance > 0:
                     self.low_pass_filter(distance)
                     if self._cnt % 20 == 0 and self._cnt / 20 < max_disp_cnt:
-                        print("Range: %d mm, %0.1f  %0.1f  %0.1f  %0.1f" % (int(self.range), self._range5, self._range10,
-                                                                            self._range15, self._range20))
+                        print("Range: %d mm, %0.1f  %0.1f  %0.1f  %0.1f  %0.1f" % (int(self.range),
+                                                                                   self._range5 - self._range,
+                                                                                   self._range10 - self._range,
+                                                                                   self._range15 - self._range,
+                                                                                   self._range20 - self._range,
+                                                                                   self._range30 - self._range))
                 else:
                     restart = True
                 self._ranging = False
