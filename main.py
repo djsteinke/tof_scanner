@@ -32,7 +32,7 @@ r_pins = [24, 25, 8, 7]
 def run_scan():
     points = []
     v_steps = 512
-    r_step = 4
+    r_step = 2
     r_steps = int(512/360.0*angle)
     for h in range(0, int(height), 2):              # height in mm
         print('V: %d/%d' % (h, int(height)))
@@ -67,25 +67,19 @@ def run_scan():
 
 def run_scan_new():
     global scanning
-    steps = int(height) / 2 * 512
-    r_stepper.start_step(steps, rpm=2)
-    v_stepper.start_step(steps, rpm=1, ccwise=True)
-    scanning = True
     points = []
-    while scanning:
-        r_step = r_stepper.step
-        v_step = v_stepper.step
+    steps = int(height / 2 * 512)
+    for h in range(0, steps, 4):
+        if h > 0:
+            v_stepper.step(4, ccwise=True)
         rad = center - tof.range
-        i = r_step % 512
+        i = h % 512
         alpha = math.radians(360.0 / 512.0 * (i * 1.0))
-        h = v_step * 1.0 / 512.0 * 2.0
         points.append([
             rad * math.sin(alpha), rad * math.cos(alpha), h
         ])
-        scanning = r_step >= r_stepper.steps and v_step >= v_stepper.steps
-        sleep(0.008)
+        r_stepper.step(4, rpm=2)
 
-    # return sensor to bottom
     Timer(0.1, return_vert).start()
 
     points = ["%0.1f %0.1f %0.1f" % (x, y, z) for x, y, z in points]
@@ -133,5 +127,5 @@ if __name__ == '__main__':
     if scan:
         v_stepper = Stepper(v_pins)
         r_stepper = Stepper(r_pins)
-        run_scan_new()
-        # run_scan()
+        #run_scan_new()
+        run_scan()

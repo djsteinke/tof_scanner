@@ -26,7 +26,8 @@ class Stepper(object):
             self._wait = wait_from_rpm(rpm)
         if self._wait < 0.005:
             self._wait = 0.005
-        Timer(0.001, self.run).start()
+        self._motor.motor_run(self._pins, steps=steps, ccwise=self._ccwise, steptype="full", wait=self._wait)
+        # Timer(0.001, self.run).start()
 
     def run(self):
         while self._running:
