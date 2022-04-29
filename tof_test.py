@@ -27,7 +27,7 @@ class TOF(object):
         self._range10 += ((val - self._range10) * 0.10)
         self._range15 += ((val - self._range15) * 0.15)
         self._range20 += ((val - self._range20) * 0.20)
-        self._range30 += ((val - self._range20) * 0.30)
+        self._range30 += ((val - self._range30) * 0.30)
 
     def get_range(self):
         if self._running:
