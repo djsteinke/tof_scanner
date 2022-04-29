@@ -74,9 +74,10 @@ def run_scan_new():
             v_stepper.start_step(4, ccwise=True)
         rad = center - tof.range
         i = h % 512
+        z = h * 1.0 / 512.0
         alpha = math.radians(360.0 / 512.0 * (i * 1.0))
         points.append([
-            rad * math.sin(alpha), rad * math.cos(alpha), h
+            rad * math.sin(alpha), rad * math.cos(alpha), z
         ])
         r_stepper.start_step(4, rpm=2)
 
