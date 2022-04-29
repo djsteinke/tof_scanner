@@ -101,7 +101,7 @@ def run_scan_new():
 
 def return_vert():
     s = int(height) / 2 * 512
-    v_stepper.step(s)
+    v_stepper.start_step(s)
 
 
 if __name__ == '__main__':

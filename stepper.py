@@ -30,6 +30,7 @@ class Stepper(object):
     def run(self):
         while self._running:
             self._motor.motor_run(self._pins, steps=1, ccwise=self._ccwise, steptype="full", wait=self._wait)
+            self._step += 1
 
     def stop(self):
         self._running = False
