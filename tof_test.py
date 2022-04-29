@@ -6,6 +6,8 @@ from logging import getLogger
 module_logger = getLogger("main.tof")
 max_disp_cnt = 120
 
+out = list()
+
 
 class TOF(object):
     def __init__(self):
@@ -28,6 +30,7 @@ class TOF(object):
         self._range15 += ((val - self._range15) * 0.15)
         self._range20 += ((val - self._range20) * 0.20)
         self._range30 += ((val - self._range30) * 0.30)
+        out.append([self._range, self._range5, self._range10, self._range15, self._range20, self._range30])
 
     def get_range(self):
         if self._running:
@@ -45,6 +48,12 @@ class TOF(object):
                                                                                    self._range15 - self._range,
                                                                                    self._range20 - self._range,
                                                                                    self._range30 - self._range))
+                    if self._cnt / 20 >= max_disp_cnt:
+                        points = ["%d, %0.1f, %0.1f, %0.1f, %0.1f, %0.1f" % (a, b, c, d, e, f) for a, b, c, d, e, f in out]
+                        points = str.join("\n", points)
+                        out_f = open('tof_test.txt', "w")
+                        out_f.write(points)
+                        out_f.close()
                 else:
                     restart = True
                 self._ranging = False
