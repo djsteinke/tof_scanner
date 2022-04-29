@@ -37,3 +37,7 @@ class Stepper(object):
     @property
     def step(self):
         return self._step
+
+    @property
+    def steps(self):
+        return self._steps
