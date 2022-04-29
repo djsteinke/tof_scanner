@@ -128,5 +128,6 @@ if __name__ == '__main__':
     if scan:
         v_stepper = Stepper(v_pins)
         r_stepper = Stepper(r_pins)
+        sleep(2.0)
         run_scan_new()
         #run_scan()
