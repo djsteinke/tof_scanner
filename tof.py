@@ -31,7 +31,7 @@ class TOF(object):
                 distance = self._sensor.get_distance()
                 if distance > 0:
                     self.low_pass_filter(distance)
-                    if (self._cnt % 20 == 0 and self._cnt / 20 < max_disp_cnt) or self._log:
+                    if self._cnt % 20 == 0 and (self._cnt / 20 < max_disp_cnt or self._log):
                         module_logger.debug("Range: %d mm, %0.1f mm" % (distance, self.range))
                 else:
                     restart = True
