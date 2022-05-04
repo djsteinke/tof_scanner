@@ -49,6 +49,7 @@ def run_scan_new(start_h=0):
         if int(z) > last_mm:
             a_points = ["%0.1f %0.1f %0.1f" % (x, y, z) for x, y, z in points]
             str_points = str.join("\n", a_points)
+            str_points += "\n"
             out = open(f'{timestamp}.xyz', "a")
             out.write(str_points)
             out.close()
@@ -65,8 +66,12 @@ def run_scan_new(start_h=0):
     out = open(f'{timestamp}.xyz', "a")
     out.write(str_points)
     out.close()
+    logger.debug("wrote %d steps to file." % len(points))
 
     tof.stop()
+    logger.debug('TOF stopped.')
+    logger.debug('exiting...')
+    exit()
 
 
 def return_vert():
@@ -108,7 +113,8 @@ if __name__ == '__main__':
         if not os.path.isdir(path):
             os.makedirs(path)
 
-        tof = TOF()
+        log = not scan
+        tof = TOF(log=log)
         tof.start()
 
         scanning = False

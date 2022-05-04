@@ -9,13 +9,14 @@ max_disp_cnt = 60
 
 
 class TOF(object):
-    def __init__(self):
+    def __init__(self, log=False):
         self._running = False
         self._ranging = False
         self._range = 0
         self._delay = 0.02
         self._sensor = None
         self._cnt = 0
+        self._log = log
 
     def low_pass_filter(self, val):
         a = 0.60
@@ -30,7 +31,7 @@ class TOF(object):
                 distance = self._sensor.get_distance()
                 if distance > 0:
                     self.low_pass_filter(distance)
-                    if self._cnt % 20 == 0 and self._cnt / 20 < max_disp_cnt:
+                    if (self._cnt % 20 == 0 and self._cnt / 20 < max_disp_cnt) or self._log:
                         module_logger.debug("Range: %d mm, %0.1f mm" % (distance, self.range))
                 else:
                     restart = True
