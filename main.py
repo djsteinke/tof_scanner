@@ -52,7 +52,7 @@ def run_scan_new():
             out = open(f'{timestamp}.xyz', "a")
             out.write(str_points)
             out.close()
-            logger.debug("wrote %d steps to file." % (len(points)))
+            logger.debug("wrote %d steps to file. alpha [%0.3f]" % (len(points), alpha))
             points = []
             last_mm = int(z)
             print("%d/%d" % (last_mm, height))
