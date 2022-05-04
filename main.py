@@ -29,13 +29,13 @@ v_pins = [14, 15, 18, 23]
 r_pins = [24, 25, 8, 7]
 
 
-def run_scan_new():
+def run_scan_new(start_h=0):
     global scanning
     points = []
     steps = int(height / 2 * 512)
     last_mm = 0
     timestamp = strftime('%Y%m%d_%H%M%S')
-    for h in range(0, steps, 4):
+    for h in range(start_h, steps, 4):
         if h > 0:
             v_stepper.start_step(4, ccwise=True)
             r_stepper.start_step(2, rpm=2)
