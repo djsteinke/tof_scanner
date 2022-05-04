@@ -38,11 +38,11 @@ def run_scan_new(start_h=0):
     for h in range(start_h, steps, 4):
         if h > 0:
             v_stepper.start_step(4, ccwise=True)
-            r_stepper.start_step(2, rpm=2)
+            r_stepper.start_step(4, rpm=2)
         rad = center - tof.range
         i = h % 512 * 1.0
         z = h * 1.0 / 512.0 * 2.0
-        alpha = math.radians(i / (512.0*2.0) * 360.0)
+        alpha = math.radians(i / 512.0 * 360.0)
         points.append([
             rad * math.sin(alpha), rad * math.cos(alpha), z
         ])
@@ -55,7 +55,7 @@ def run_scan_new(start_h=0):
             logger.debug("wrote %d steps to file. alpha [%0.3f]" % (len(points), alpha))
             points = []
             last_mm = int(z)
-            print("%d/%d" % (last_mm, height))
+            #print("%d/%d" % (last_mm, height))
             logger.debug("%d/%d" % (last_mm, height))
 
     Timer(0.1, return_vert).start()
