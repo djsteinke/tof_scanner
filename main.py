@@ -38,8 +38,8 @@ def run_scan_new(start_h=0):
     for h in range(start_h, steps, 4):
         if h > 0:
             v_stepper.start_step(4, ccwise=True)
-            r_stepper.start_step(4, rpm=2)
-        rad = center - tof.range
+            r_stepper.start_step(4, rpm=1)
+        rad = center - (tof.range-6)
         i = h % 512 * 1.0
         z = h * 1.0 / 512.0 * 2.0
         alpha = math.radians(i / 512.0 * 360.0)
@@ -83,7 +83,7 @@ if __name__ == '__main__':
     parser = optparse.OptionParser()
     parser.add_option("-s", "--scan", action="store", type="string", default="true", dest="scan",
                       help="")
-    parser.add_option("-c", "--center", action="store", type="int", default=181, dest="center",
+    parser.add_option("-c", "--center", action="store", type="int", default=175, dest="center",
                       help="")
     parser.add_option("-v", "--height", action="store", type="int", default=270, dest="height",
                       help="")
