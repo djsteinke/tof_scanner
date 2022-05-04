@@ -34,29 +34,36 @@ def run_scan_new():
     points = []
     steps = int(height / 2 * 512)
     last_mm = 0
+    timestamp = strftime('%Y%m%d_%H%M%S')
     for h in range(0, steps, 4):
         if h > 0:
             v_stepper.start_step(4, ccwise=True)
-            r_stepper.start_step(4, rpm=2)
+            r_stepper.start_step(2, rpm=2)
         rad = center - tof.range
         i = h % 512 * 1.0
         z = h * 1.0 / 512.0 * 2.0
-        if int(z) > last_mm:
-            last_mm = int(z)
-            print("%d/%d" % (last_mm, height))
         alpha = math.radians(i / 512.0 * 360.0)
         points.append([
             rad * math.sin(alpha), rad * math.cos(alpha), z
         ])
+        if int(z) > last_mm:
+            a_points = ["%0.1f %0.1f %0.1f" % (x, y, z) for x, y, z in points]
+            str_points = str.join("\n", a_points)
+            out = open(f'{timestamp}.xyz', "a")
+            out.write(str_points)
+            out.close()
+            logger.debug("wrote %d steps to file." % (len(points)))
+            points = []
+            last_mm = int(z)
+            print("%d/%d" % (last_mm, height))
+            logger.debug("%d/%d" % (last_mm, height))
 
     Timer(0.1, return_vert).start()
 
-    points = ["%0.1f %0.1f %0.1f" % (x, y, z) for x, y, z in points]
-    points = str.join("\n", points)
-
-    timestamp = strftime('%Y%m%d_%H%M%S')
-    out = open(f'{timestamp}.xyz', "w")
-    out.write(points)
+    a_points = ["%0.1f %0.1f %0.1f" % (x, y, z) for x, y, z in points]
+    str_points = str.join("\n", a_points)
+    out = open(f'{timestamp}.xyz', "a")
+    out.write(str_points)
     out.close()
 
     tof.stop()
