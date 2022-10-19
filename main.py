@@ -61,8 +61,7 @@ def run_scan_new(start_h=0):
 
     Timer(0.1, return_vert).start()
 
-    a_points = ["%0.1f %0.1f %0.1f" % (x, y, z) for x, y, z in points]
-    str_points = str.join("\n", a_points)
+
     out = open(f'{timestamp}.xyz', "a")
     out.write(str_points)
     out.close()
